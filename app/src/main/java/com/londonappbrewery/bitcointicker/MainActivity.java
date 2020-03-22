@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     // Constants:
     // TODO: Create the base URL
     // https://apiv2.bitcoinaverage.com/indices/global/ticker/BTCUSD
-    private final String BASE_URL = "https://apiv2.bitcoinaverage.com/indices/global/ticker/";
+    private final String BASE_URL = "https://apiv2.bitcoinaverage.com/indices/global/ticker/BTC";
 
     // Member Variables:
     TextView mPriceTextView;
@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("Bitcoin","Selected Currency : " + parent.getItemAtPosition(position));
+                String url = BASE_URL + parent.getItemAtPosition(position);
+                letsDoSomeNetworking(url);
             }
 
             @Override
@@ -71,12 +73,18 @@ public class MainActivity extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(BASE_URL, params, new JsonHttpResponseHandler() {
+        client.get(url, params, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // called when response HTTP status is "200 OK"
                 Log.d("Bitcoin", "JSON: " + response.toString());
+
+                try{
+                      String price = response.getString("last");
+                } catch (JSONException e){
+                          Log.d("",e.toString());
+                }
 
             }
 
